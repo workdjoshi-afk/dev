@@ -1,13 +1,22 @@
 workflows:
   ios-capacitor:
-    name: iOS Capacitor Build
+    name: iOS Direct Build
 
     environment:
       xcode: latest
       node: latest
 
     scripts:
+      - name: Install dependencies
+        script: npm install
 
+      - name: Sync Capacitor (use existing dist)
+        script: npx cap sync ios
+
+      - name: Install CocoaPods
+        script: |
+          cd ios/App
+          pod install
 
       - name: Build iOS archive
         script: |
