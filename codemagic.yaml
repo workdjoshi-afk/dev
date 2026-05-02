@@ -1,9 +1,42 @@
 workflows:
+  ios-capacitor:
+    name: iOS Capacitor Build
 
-    sample-workflow:
+    environment:
+      xcode: latest
+      node: latest
 
-        name: Codemagic Sample Workflow
+    scripts:
+      - name: Install dependencies
+        script: npm install
 
-        max_build_duration: 120
+      - name: Build web app
+        script: npm run build
 
-        instance_type: mac_mini_m2
+      - name: Sync Capacitor
+        script: npx cap sync ios
+
+      - name: Install CocoaPods
+        script: |
+          cd ios/App
+          pod install
+
+      - name: Build iOS archive
+        script: |
+          cd ios/App
+          xcodebuild \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -archivePath build/App.xcarchive \
+            archive
+
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath ios/App/build/App.xcarchive \
+            -exportOptionsPlist ios/App/ExportOptions.plist \
+            -exportPath build/ios
+
+    artifacts:
+      - build/ios/*.ipa
