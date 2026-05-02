@@ -1,17 +1,29 @@
 workflows:
 
-    android-workflow-id:
+  simulator-workflow:
 
-        name: Android Sample Workflow
+    name: Build for simulator
 
-        # .......    
+    environment:
 
-        # .......
+      xcode: latest
 
-        # .......  
+    scripts:
 
-    ios-workflow-id:
+      - name: Build with Generic Destination
 
-        name: iOS Sample Workflow
+        script: |
 
-        # ......
+          xcodebuild build \
+
+            -project "yourproject.xcodeproj" \
+
+            -scheme "yourscheme" \
+
+            -sdk iphonesimulator \
+
+            -configuration Debug          
+
+    artifacts:
+
+      - /Users/builder/Library/Developer/Xcode/DerivedData/**/*.app
