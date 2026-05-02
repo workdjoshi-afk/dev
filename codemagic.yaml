@@ -11,14 +11,7 @@ workflows:
         script: npm install
 
       - name: Build iOS archive
-        script: |
-          cd ios/App
-          xcodebuild \
-            -workspace App.xcworkspace \
-            -scheme App \
-            -configuration Release \
-            -archivePath build/App.xcarchive \
-            archive
+        script: npx cap build ios
 
       - name: Export IPA
         script: |
